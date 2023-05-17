@@ -11,8 +11,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  console.log(email, password);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,7 +28,6 @@ const Login = () => {
       });
       if (response.success) {
         toast.success(response.response.message);
-        console.log('response', response)
         router.push("/")
       }else{
         toast.error(response.response.message)
@@ -40,7 +37,7 @@ const Login = () => {
 
   return (
     <div className=" main-container bg-neutral-200 dark:bg-neutral-700">
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className=" h-full p-10 mx-auto">
         <div className="g-6 flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
           <div className="w-full">
