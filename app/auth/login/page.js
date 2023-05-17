@@ -1,7 +1,10 @@
 "use client";
+import { postData } from "@/utils/api";
 import { isValidEmail, isValidPassword } from "@/utils/functions";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,19 +13,34 @@ const Login = () => {
 
   console.log(email, password);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(isValidEmail(email))
-    console.log(isValidPassword(password))
-    if(isValidEmail(email) && isValidPassword(password)){
-      // process.env.BACKEN_URL
+
+    if (!isValidEmail(email)) {
+  
+      toast.error("Email is not valid.");
+    } else if (!isValidPassword(password)) {
+      toast.error(
+        "Password should contain capital, lower letter, number and special character."
+      );
+    }else{
+      let response = await postData(`${process.env.BACKEN_URL}/auth/login`, {
+        email,
+        password,
+      });
+      if (response.success) {
+        toast.success(response.response.message);
+        console.log('response', response)
+        router.push("/")
+      }else{
+        toast.error(response.response.message)
+      }
     }
   };
 
-  console.log(process.env.BACKEN_URL)
-
   return (
     <div className=" main-container bg-neutral-200 dark:bg-neutral-700">
+      <ToastContainer />
       <div className=" h-full p-10 mx-auto">
         <div className="g-6 flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
           <div className="w-full">
